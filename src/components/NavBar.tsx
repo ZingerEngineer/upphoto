@@ -43,7 +43,6 @@ const Example = () => {
                     alt="Your Company"
                   />
                 </div>
-                <BrowserRouter>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
@@ -61,14 +60,12 @@ const Example = () => {
                     ))}
                   </div>
                 </div>
-                </BrowserRouter>
               </div>
             </div>
           </div>
 
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              <BrowserRouter>
               {navigation.map((item) => (
                 <Link
                   key={item.name}
@@ -82,7 +79,6 @@ const Example = () => {
                   {item.name}
                 </Link>
               ))}
-              </BrowserRouter>
             </div>
           </Disclosure.Panel>
         </>
