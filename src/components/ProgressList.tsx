@@ -1,7 +1,7 @@
 const ProgressList = () => {
   return ( 
     <>
-    <div className="list w-full flex flex-col bg-slate-500 h-64">
+    <div className="list flex flex-col bg-slate-500 flex-grow h-64">
       
     </div>
     </>

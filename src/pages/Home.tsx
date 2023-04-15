@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <>
     <NavBar/>
-    <div className="home-content text-white font-semibold">
+    <div className="home-content text-white font-semibold flex flex-col flex-grow">
       <div className="upload-section w-full flex flex-col items-center bg-gray-900 py-8">
         <div className="m-2 flex flex-col items-center">
         <ArrowUpOnSquareIcon className="w-28 m-4"/>
