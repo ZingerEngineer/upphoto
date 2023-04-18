@@ -4,11 +4,9 @@ import ProgressList from '../components/ProgressList'
 import { Firestore, addDoc, collection } from '@firebase/firestore'
 import { db } from '../firebase'
 import { useState, SetStateAction } from 'react'
-interface stateActionValues {
-  value: SetStateAction<File> | null
-}
+
 const Home = () => {
-  const [photoToUpload, setPhotoToUpload] = useState(null)
+  const [photoToUpload, setPhotoToUpload] = useState<File | null>(null)
   // const uploadPhoto = () => {
   //   collection(Firestore, 'temp')
   // }
@@ -26,8 +24,10 @@ const Home = () => {
               type="file"
               id="files"
               className="Button px-4 py-2 w-fit h-fit rounded-l-md bg-violet-800 border-0 text-white font-sans font-semibold focus:outline-none hover:cursor-pointer hover:bg-violet-500 duration-100"
-              onChange={(event) => {
-                console.log(event)
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                const selectedFile = event.target.files?.[0]
+                setPhotoToUpload(selectedFile || null)
+                console.log(selectedFile)
               }}
             />
             <input
