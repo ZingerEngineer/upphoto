@@ -4,11 +4,8 @@ import About from './pages/About'
 import NotFound from './pages/NotFound'
 // import ProgressList from './components/ProgressList';
 // import { Link } from 'react-router-dom';
-import { initializeApp } from 'firebase/app'
-import { firebaseConfig } from './config'
 
 export default function App() {
-  initializeApp(firebaseConfig)
   return (
     <>
       <div
