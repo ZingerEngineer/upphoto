@@ -1,11 +1,9 @@
 const ProgressList = () => {
-  return ( 
+  return (
     <>
-    <div className="list flex flex-col bg-slate-500 flex-grow h-64">
-      
-    </div>
+      <div className="list flex flex-col bg-slate-500 flex-grow h-64"></div>
     </>
-   );
+  )
 }
- 
-export default ProgressList;
+
+export default ProgressList

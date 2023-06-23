@@ -1,15 +1,25 @@
 import NavBar from '../components/NavBar'
 import { ArrowUpOnSquareIcon } from '@heroicons/react/24/outline'
 import ProgressList from '../components/ProgressList'
-import { useState } from 'react'
-
+import { useState, useRef } from 'react'
+import { uploadImage } from '../utils/firebase'
 const Home = () => {
-  const [photoToUpload, setPhotoToUpload] = useState<File | null>(null)
-
-  // const uploadPhoto = () => {
-  //   collection(Firestore, 'temp')
-  // }
-
+  const [photoToUpload, setPhotoToUpload] = useState<File | undefined>()
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const handleSelection = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const selectedFile = event.target.files?.[0]
+    if (selectedFile) {
+      const res = await uploadImage(selectedFile)
+      console.log(res)
+      if (!inputRef?.current) {
+        return
+      }
+      inputRef.current.value = ''
+      return res
+    }
+  }
   return (
     <>
       <NavBar />
@@ -24,11 +34,8 @@ const Home = () => {
               type="file"
               id="files"
               className="Button h-fit w-fit rounded-l-md border-0 bg-violet-800 px-4 py-2 font-sans font-semibold text-white duration-100 hover:cursor-pointer hover:bg-violet-500 focus:outline-none"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const selectedFile = event.target.files?.[0]
-                setPhotoToUpload(selectedFile || null)
-                console.log(selectedFile)
-              }}
+              onChange={handleSelection}
+              ref={inputRef}
             />
             <input
               type="text"
@@ -44,5 +51,4 @@ const Home = () => {
     </>
   )
 }
-
 export default Home
