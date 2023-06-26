@@ -9,32 +9,38 @@ import { useState, useRef } from 'react'
 import { uploadImage } from '../utils/firebase'
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const [photoToUpload, setPhotoToUpload] = useState<File | undefined>()
   const InvertLoading = () => {
     setIsLoading(!isLoading)
   }
-  const [photoToUpload, setPhotoToUpload] = useState<File | undefined>()
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const handleSelection = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+
+  const handleSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
     InvertLoading()
     const selectedFile = event.target.files?.[0]
     if (selectedFile) {
-      const data = await notifyPromise(uploadImage(selectedFile))
-      console.log(data)
       if (!inputRef?.current) {
-        console.log(inputRef)
-        console.log('wrong')
         InvertLoading()
+        console.log('Input.current is null.')
         return
       }
       inputRef.current.value = ''
-      console.log('After notifySuccess')
       InvertLoading()
-      return data
+      setPhotoToUpload(selectedFile)
     }
   }
-  console.log(inputRef.current)
+  const handleUploadClick = async () => {
+    if (photoToUpload) {
+      await notifyPromise(uploadImage(photoToUpload))
+    } else {
+      console.log("Provided image isn't valid")
+    }
+  }
+
+  const handleBrowseClick = () => {
+    inputRef.current?.click()
+  }
+
   return (
     <>
       <ToastContainer />
@@ -47,6 +53,7 @@ const Home = () => {
           </div>
           <div className="flex items-center justify-center">
             <input
+              className="hidden"
               type="file"
               id="files"
               onChange={handleSelection}
@@ -54,11 +61,14 @@ const Home = () => {
             />
             <button
               className="Button h-fit w-fit rounded-md border-0 bg-violet-800 px-8 py-2 m-2 font-sans font-semibold text-white duration-100 hover:cursor-pointer hover:bg-violet-500 focus:outline-none"
-              onClick={inputRef.current?.click}
+              onClick={handleBrowseClick}
             >
               Browse
             </button>
-            <button className="Button h-fit w-fit rounded-md border-0 bg-violet-800 px-8 py-2 m-2 font-sans font-semibold text-white duration-100 hover:cursor-pointer hover:bg-violet-500 focus:outline-none">
+            <button
+              className="Button h-fit w-fit rounded-md border-0 bg-violet-800 px-8 py-2 m-2 font-sans font-semibold text-white duration-100 hover:cursor-pointer hover:bg-violet-500 focus:outline-none"
+              onClick={handleUploadClick}
+            >
               Upload
             </button>
           </div>
