@@ -3,10 +3,11 @@ import { ArrowUpOnSquareIcon } from '@heroicons/react/24/outline'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 import { notifyMessage, notifyPromise, notifySuccess } from '../utils/toasts'
-import ProgressList from '../components/ProgressList'
+import ProgressList from '../components/Preview'
 import Spinner from '../components/Spinner'
 import { useState, useRef, useEffect } from 'react'
 import { uploadImage } from '../utils/firebase'
+import Preview from '../components/Preview'
 const Home = () => {
   const handleDrage = () => {
     console.log('dragging')
@@ -17,10 +18,9 @@ const Home = () => {
     if (uploadButtonRef.current !== null && loading) {
       uploadButtonRef.current.disabled = true
     }
-    console.log(`Upload ${uploadButtonRef.current?.disabled}`)
-    console.log(loading)
   }, [loading, uploadButtonRef])
   const [photoToUpload, setPhotoToUpload] = useState<File | undefined>()
+  const [currentImageURL, setCurrentImageURL] = useState<string | undefined>()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const handleSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0]
@@ -34,22 +34,26 @@ const Home = () => {
     }
   }
   const handleUploadClick = async () => {
-    if (
-      uploadButtonRef.current?.disabled === false &&
-      !loading &&
-      photoToUpload
-    ) {
-      if (photoToUpload) {
+    try {
+      if (
+        uploadButtonRef.current?.disabled === false &&
+        !loading &&
+        photoToUpload
+      ) {
+        if (photoToUpload) {
+          setLoading((loading) => !loading)
+          const res = await notifyPromise(uploadImage(photoToUpload))
+          setCurrentImageURL(res.url)
+        } else {
+          console.log("Provided image isn't valid")
+        }
         setLoading((loading) => !loading)
-
-        await notifyPromise(uploadImage(photoToUpload))
-      } else {
-        console.log("Provided image isn't valid")
+        if (uploadButtonRef.current !== null) {
+          uploadButtonRef.current.disabled = false
+        }
       }
-      setLoading((loading) => !loading)
-      if (uploadButtonRef.current !== null) {
-        uploadButtonRef.current.disabled = false
-      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -63,12 +67,12 @@ const Home = () => {
       <NavBar />
       <div className="home-content flex flex-grow flex-col font-semibold text-white">
         <div
-          className="upload-section flex w-full flex-col items-center bg-gray-900 py-8"
+          className="upload-section flex w-full flex-col items-center bg-gray-900 py-8 border-dashed border-4 border-white/20"
           onDrag={handleDrage}
         >
           <div className="m-2 flex flex-col items-center">
-            <ArrowUpOnSquareIcon className="m-4 w-28" />
-            <p>Upload your image or drag it over here.</p>
+            <ArrowUpOnSquareIcon className="m-4 w-28 opacity-20" />
+            <p>Upload or drag your image over here.</p>
           </div>
           <div className="flex items-center justify-center">
             <input
@@ -94,9 +98,10 @@ const Home = () => {
               </button>
             </div>
           </div>
+          <p className="cursor-default">{`Selected file: ${photoToUpload?.name}`}</p>
         </div>
-        <ProgressList></ProgressList>
       </div>
+      <Preview URL={currentImageURL} />
     </>
   )
 }

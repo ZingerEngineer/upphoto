@@ -2,8 +2,6 @@ import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import About from './pages/About'
 import NotFound from './pages/NotFound'
-// import ProgressList from './components/ProgressList';
-// import { Link } from 'react-router-dom';
 export default function App() {
   return (
     <>
