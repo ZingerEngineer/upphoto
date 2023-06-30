@@ -98,7 +98,9 @@ const Home = () => {
               </button>
             </div>
           </div>
-          <p className="cursor-default">{`Selected file: ${photoToUpload?.name}`}</p>
+          <p className="cursor-default">
+            {photoToUpload ? `Selected file: ${photoToUpload?.name}` : ''}
+          </p>
         </div>
       </div>
       <Preview URL={currentImageURL} />
