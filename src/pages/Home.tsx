@@ -4,36 +4,52 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 import { notifyMessage, notifyPromise, notifySuccess } from '../utils/toasts'
 import ProgressList from '../components/ProgressList'
-import spinner from '../components/spinner'
-import { useState, useRef } from 'react'
+import Spinner from '../components/Spinner'
+import { useState, useRef, useEffect } from 'react'
 import { uploadImage } from '../utils/firebase'
 const Home = () => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [photoToUpload, setPhotoToUpload] = useState<File | undefined>()
-  const InvertLoading = () => {
-    setIsLoading(!isLoading)
+  const handleDrage = () => {
+    console.log('dragging')
   }
+  const [loading, setLoading] = useState(false)
+  const uploadButtonRef = useRef<HTMLButtonElement | null>(null)
+  useEffect(() => {
+    if (uploadButtonRef.current !== null && loading) {
+      uploadButtonRef.current.disabled = true
+    }
+    console.log(`Upload ${uploadButtonRef.current?.disabled}`)
+    console.log(loading)
+  }, [loading, uploadButtonRef])
+  const [photoToUpload, setPhotoToUpload] = useState<File | undefined>()
   const inputRef = useRef<HTMLInputElement | null>(null)
-
   const handleSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
-    InvertLoading()
     const selectedFile = event.target.files?.[0]
     if (selectedFile) {
       if (!inputRef?.current) {
-        InvertLoading()
         console.log('Input.current is null.')
         return
       }
       inputRef.current.value = ''
-      InvertLoading()
       setPhotoToUpload(selectedFile)
     }
   }
   const handleUploadClick = async () => {
-    if (photoToUpload) {
-      await notifyPromise(uploadImage(photoToUpload))
-    } else {
-      console.log("Provided image isn't valid")
+    if (
+      uploadButtonRef.current?.disabled === false &&
+      !loading &&
+      photoToUpload
+    ) {
+      if (photoToUpload) {
+        setLoading((loading) => !loading)
+
+        await notifyPromise(uploadImage(photoToUpload))
+      } else {
+        console.log("Provided image isn't valid")
+      }
+      setLoading((loading) => !loading)
+      if (uploadButtonRef.current !== null) {
+        uploadButtonRef.current.disabled = false
+      }
     }
   }
 
@@ -46,7 +62,10 @@ const Home = () => {
       <ToastContainer />
       <NavBar />
       <div className="home-content flex flex-grow flex-col font-semibold text-white">
-        <div className="upload-section flex w-full flex-col items-center bg-gray-900 py-8">
+        <div
+          className="upload-section flex w-full flex-col items-center bg-gray-900 py-8"
+          onDrag={handleDrage}
+        >
           <div className="m-2 flex flex-col items-center">
             <ArrowUpOnSquareIcon className="m-4 w-28" />
             <p>Upload your image or drag it over here.</p>
@@ -59,18 +78,21 @@ const Home = () => {
               onChange={handleSelection}
               ref={inputRef}
             />
-            <button
-              className="Button h-fit w-fit rounded-md border-0 bg-violet-800 px-8 py-2 m-2 font-sans font-semibold text-white duration-100 hover:cursor-pointer hover:bg-violet-500 focus:outline-none"
-              onClick={handleBrowseClick}
-            >
-              Browse
-            </button>
-            <button
-              className="Button h-fit w-fit rounded-md border-0 bg-violet-800 px-8 py-2 m-2 font-sans font-semibold text-white duration-100 hover:cursor-pointer hover:bg-violet-500 focus:outline-none"
-              onClick={handleUploadClick}
-            >
-              Upload
-            </button>
+            <div className="buttons flex flex-row">
+              <button
+                className="Button h-fit w-fit rounded-md border-0 bg-violet-800 px-8 py-2 m-2 font-sans font-semibold text-white duration-100 hover:cursor-pointer hover:bg-violet-500 focus:outline-none"
+                onClick={handleBrowseClick}
+              >
+                Browse
+              </button>
+              <button
+                className="Button h-fit w-fit rounded-md border-0 bg-violet-800 px-8 py-2 m-2 font-sans font-semibold text-white duration-100 hover:cursor-pointer hover:bg-violet-500 focus:outline-none  disabled:bg-purple-300"
+                onClick={handleUploadClick}
+                ref={uploadButtonRef}
+              >
+                {loading ? <Spinner /> : 'Upload'}
+              </button>
+            </div>
           </div>
         </div>
         <ProgressList></ProgressList>
