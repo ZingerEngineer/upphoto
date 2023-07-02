@@ -2,11 +2,7 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link, BrowserRouter } from 'react-router-dom'
-const navigation = [
-  { name: 'Home', link: '/', current: true },
-  { name: 'Projects', link: '/projects', current: false },
-  { name: 'About', link: '/about', current: false }
-]
+const navigation = [{ name: 'Uploader', link: '/', current: true }]
 
 function classNames(...classes: (boolean | string | undefined)[]): string {
   return classes.filter(Boolean).join(' ')
@@ -16,7 +12,7 @@ const Example = () => {
   return (
     <Disclosure
       as="nav"
-      className="bg-gray-800"
+      className="bg-transparent hover:bg-white/5 duration-100"
     >
       {({ open }) => (
         <>
@@ -24,7 +20,7 @@ const Example = () => {
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white ">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XMarkIcon
@@ -60,7 +56,7 @@ const Example = () => {
                         to={item.link}
                         className={classNames(
                           item.current
-                            ? 'bg-gray-900 text-white'
+                            ? ' text-white drop drop-shadow-[0px_0px_5px_rgba(255,255,255,0.5)] bg-violet-600/20 hover:bg-white/20 hover:duration-200'
                             : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                           'rounded-md px-3 py-2 text-sm font-medium'
                         )}

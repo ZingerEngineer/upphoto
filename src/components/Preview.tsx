@@ -4,24 +4,27 @@ interface currentImageURL {
 const Preview = ({ URL }: currentImageURL) => {
   return (
     <>
-      <div className="list flex flex-row bg-gray-500 h-64 p-6">
+      <div className="list flex flex-row bg-black/50 p-6 d mx-auto rounded-md items-center">
         {URL ? (
           <img
             draggable="false"
             src={URL}
-            className="border-solid border-4 shadow-sm rounded-md w-60 h-fit bg-cover"
+            className="border-solid border-4 shadow-sm rounded-md w-[20%] h-fit bg-cover"
           ></img>
         ) : (
           ''
         )}
         {URL ? (
-          <a
-            className="text-ellipsis overflow-hidden whitespace-nowrap text-blue-600 visited:no-underline font-bold h-fit"
-            href={URL}
-            target="_blank"
-          >
-            {URL}
-          </a>
+          <div className="p-5 text-lg text-ellipsis overflow-hidden flex flex-col justify-center">
+            <p>Download link:</p>
+            <a
+              className="text-ellipsis overflow-hidden whitespace-nowrap text-blue-600 visited:no-underline h-fit"
+              href={URL}
+              target="_blank"
+            >
+              {URL}
+            </a>
+          </div>
         ) : (
           ''
         )}
