@@ -7,52 +7,44 @@ import Spinner from '../components/Spinner'
 import React, { useState, useRef, useEffect } from 'react'
 import { uploadImage } from '../utils/firebase'
 import Preview from '../components/Preview'
+import Button from '../components/Button'
 const Uploader = () => {
-  const [counter, setCounter] = useState(0)
+  const [isDragging, setIsDragging] = useState(0)
   const uploadSectionRef = useRef<HTMLDivElement | null>(null)
   const preventDefaultDrag = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
     event.stopPropagation()
   }
-  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-    console.log('left')
-    if (uploadSectionRef.current) {
-      const classNameStyleArray = uploadSectionRef.current.className.split(' ')
-      const filteredclassNameStyleArray = classNameStyleArray.filter(
-        (classkey) => classkey !== 'bg-white'
-      )
-      filteredclassNameStyleArray.push('bg-black')
-      console.log(classNameStyleArray)
-      uploadSectionRef.current.className = filteredclassNameStyleArray.join(' ')
-    }
-  }
+
   const handleDragStyleEnter = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
-    if (uploadSectionRef.current) {
-      uploadSectionRef.current.classList.add('bg-black')
-    }
-    console.log(counter)
+    event.stopPropagation()
+    setIsDragging(1)
   }
-  useEffect(() => {
-    setCounter(counter + 1)
-  }, [uploadSectionRef.current?.ondragenter])
 
   useEffect(() => {
-    setCounter(counter - 1)
-    console.log('leftinside')
-  }, [uploadSectionRef.current?.ondragleave])
+    if (!uploadSectionRef.current) return
+
+    if (isDragging) {
+      uploadSectionRef.current.classList.add('bg-black')
+      return
+    }
+
+    if (!isDragging) {
+      uploadSectionRef.current.classList.remove('bg-black')
+      return
+    }
+  }, [isDragging])
 
   const handleDragStyleLeave = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
-    if (uploadSectionRef.current && counter === 0) {
-      uploadSectionRef.current.classList.remove('bg-black')
-    }
-    console.log(counter)
+    event.stopPropagation()
+    setIsDragging(0)
   }
   const handleDropFile = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
     event.stopPropagation()
+    setIsDragging(0)
     setPhotoToUpload(event.dataTransfer.files[0])
   }
   const [loading, setLoading] = useState(false)
@@ -118,38 +110,39 @@ const Uploader = () => {
             onDragLeave={handleDragStyleLeave}
             onDragExit={preventDefaultDrag}
           >
-            <div className="m-2 flex flex-col items-center">
-              <ArrowUpOnSquareIcon className="m-4 w-28" />
-              <p>Upload or drag your image over here.</p>
-            </div>
-            <div className="flex items-center justify-center">
-              <input
-                className="hidden"
-                accept="image/*"
-                type="file"
-                id="files"
-                onChange={handleSelection}
-                ref={inputRef}
-              />
-              <div className="buttons flex flex-row">
-                <button
-                  className="Button h-fit w-fit rounded-md border-0 bg-white px-8 py-2 m-2 font-sans font-semibold text-violet-800 duration-100 hover:cursor-pointer hover:bg-violet-300 focus:outline-none"
-                  onClick={handleBrowseClick}
-                >
-                  Browse
-                </button>
-                <button
-                  className="Button h-fit w-fit rounded-md border-0 bg-white px-8 py-2 m-2 font-sans font-semibold text-violet-800 duration-100 hover:cursor-pointer hover:bg-violet-300 focus:outline-none  disabled:bg-purple-300"
-                  onClick={handleUploadClick}
-                  ref={uploadButtonRef}
-                >
-                  {loading ? <Spinner /> : 'Upload'}
-                </button>
+            <div style={{ pointerEvents: isDragging ? 'none' : 'all' }}>
+              <div
+                onDragOver={preventDefaultDrag}
+                className="m-2 flex flex-col items-center"
+              >
+                <ArrowUpOnSquareIcon className="m-4 w-28" />
+                <p>Upload or drag your image over here.</p>
               </div>
+              <div className="flex items-center justify-center">
+                <input
+                  className="hidden"
+                  accept="image/*"
+                  type="file"
+                  id="files"
+                  onChange={handleSelection}
+                  ref={inputRef}
+                />
+                <div className="buttons flex flex-row">
+                  <Button
+                    buttonContent="Browse"
+                    buttonFunction={handleBrowseClick}
+                  />
+                  <Button
+                    buttonContent={loading ? <Spinner /> : 'Upload'}
+                    buttonFunction={handleUploadClick}
+                    buttonRef={uploadButtonRef}
+                  />
+                </div>
+              </div>
+              <p className="cursor-default text-ellipsis overflow-hidden whitespace-nowrap">
+                {photoToUpload ? `Selected file: ${photoToUpload?.name}` : ''}
+              </p>
             </div>
-            <p className="cursor-default text-ellipsis overflow-hidden whitespace-nowrap">
-              {photoToUpload ? `Selected file: ${photoToUpload?.name}` : ''}
-            </p>
           </div>
         </div>
         <div className="preview-wrapper  w-[90%] mx-auto px-5 font-semibold text-white">
