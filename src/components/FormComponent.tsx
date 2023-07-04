@@ -1,15 +1,8 @@
-import { useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import FormComponentProps from '../interfaces/FormComponentProps'
+import FormComponentData from '../interfaces/FormComponentData'
 
-interface FormComponentProps {
-  formLabel: string
-  userName?: boolean
-  email?: boolean
-  password?: boolean
-  abortButtonLabel: string
-  approveButtonLabel: string
-  callBackDataFunction?: (formData: object) => void
-}
 const FormComponent = ({
   formLabel,
   userName,
@@ -23,25 +16,27 @@ const FormComponent = ({
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
   }
-  const formRef = useRef<HTMLFormElement | null>(null)
-  const [userNameValue, setUserNameValue] = useState<string | undefined>('')
-  const [emailValue, setEmailValue] = useState<string | undefined>('')
-  const [passwordValue, setPasswordValue] = useState<string | undefined>('')
-  const [formData, setFormData] = useState({})
-  const handleSignUp = () => {
-    console.log(userNameValue, emailValue, passwordValue)
+  const [userNameValue, setUserNameValue] = useState<string>('')
+  const [emailValue, setEmailValue] = useState<string>('')
+  const [passwordValue, setPasswordValue] = useState<string>('')
+  const [formData, setFormData] = useState<FormComponentData>()
+  useEffect(() => {
     setFormData({
-      userNameValue: userNameValue,
-      emailValue: emailValue,
-      passwordValue: passwordValue
+      userName: userNameValue,
+      email: emailValue,
+      password: passwordValue
     })
-    if (callBackDataFunction) callBackDataFunction(formData)
+  }, [userNameValue, emailValue, passwordValue])
+  const handleSignUp = () => {
+    console.log(formData)
+
+    if (callBackDataFunction && formData) callBackDataFunction(formData)
   }
   return (
     <form
       method="submit"
       onSubmit={handleSubmit}
-      className="bg-white p-5 rounded-md flex-grow max-w-[30vw]"
+      className="bg-white p-5 rounded-md flex-grow max-w-[70vmin] drop-shadow-[0px_0px_20px_rgb(0,0,0,0.2)]"
     >
       <div className="text-center mt-3">
         <p className="text-violet-600 font-bold text-3xl">{formLabel}</p>

@@ -26,12 +26,18 @@ const Uploader = () => {
     if (!uploadSectionRef.current) return
 
     if (isDragging) {
-      uploadSectionRef.current.classList.add('bg-black')
+      uploadSectionRef.current.classList.add(
+        'drop-shadow-[0px_0px_20px_rgb(255,255,255,0.6)]',
+        'bg-violet-200/20'
+      )
       return
     }
 
     if (!isDragging) {
-      uploadSectionRef.current.classList.remove('bg-black')
+      uploadSectionRef.current.classList.remove(
+        'drop-shadow-[0px_0px_20px_rgb(255,255,255,0.6)]',
+        'bg-violet-200/20'
+      )
       return
     }
   }, [isDragging])

@@ -6,7 +6,9 @@ import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
-initializeApp(firebaseConfig)
+import { getAuth } from 'firebase/auth'
+const fireApp = initializeApp(firebaseConfig)
+export const auth = getAuth(fireApp)
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>

@@ -1,20 +1,27 @@
-import { useState } from 'react'
 import FormComponent from '../components/FormComponent'
+import FormComponentData from '../interfaces/FormComponentData'
 import { signupUser } from '../utils/firebaseAuth'
+import { notifyMessage, notifySuccess } from '../utils/toasts'
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
 const Signup = () => {
-  const [userData, setUserData] = useState({})
-  const handleCallBack = (formData: object) => {
-    console.log(formData)
-    setUserData({ formData: formData })
-    console.log(userData, 'from parent')
+  const handleCallBack = async (formData: FormComponentData) => {
+    try {
+      await signupUser(formData.email, formData.password)
+      notifySuccess('Signup complete.')
+    } catch (error) {
+      notifyMessage('Signup failed.')
+      console.log(error)
+    }
   }
   return (
     <>
+      <ToastContainer />
       <div className="wrapper flex items-center justify-center w-full h-full">
         <FormComponent
           callBackDataFunction={handleCallBack}
           formLabel="Signup"
-          userName={true}
+          userName={false}
           email={true}
           password={true}
           abortButtonLabel="Cancel"

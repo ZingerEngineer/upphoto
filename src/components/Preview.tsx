@@ -1,7 +1,5 @@
-interface currentImageURL {
-  URL: string | undefined
-}
-const Preview = ({ URL }: currentImageURL) => {
+import PreviewComponentProps from '../interfaces/PreviewComponentProps'
+const Preview = ({ URL }: PreviewComponentProps) => {
   return (
     <>
       <div className="list flex flex-row bg-black/50 p-6 d mx-auto rounded-md items-center">
