@@ -1,14 +1,16 @@
 import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from './configs/firebase_config'
-import React from 'react'
+import React, { createContext, useEffect, useState, useContext } from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
-import { getAuth } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, Auth } from 'firebase/auth'
+
 const fireApp = initializeApp(firebaseConfig)
 export const auth = getAuth(fireApp)
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>

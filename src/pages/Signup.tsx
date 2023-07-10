@@ -1,11 +1,11 @@
-import FormComponent from '../components/FormComponent'
-import FormComponentData from '../interfaces/FormComponentData'
+import FormComponent from '../components/LoginSignupForm'
+import LoginSignupFormData from '../interfaces/LoginSignupFormData'
 import { signupUser } from '../utils/firebaseAuth'
 import { notifyMessage, notifySuccess } from '../utils/toasts'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 const Signup = () => {
-  const handleCallBack = async (formData: FormComponentData) => {
+  const handleCallBack = async (formData: LoginSignupFormData) => {
     try {
       await signupUser(formData.email, formData.password)
       notifySuccess('Signup complete.')

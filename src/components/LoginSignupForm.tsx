@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import FormComponentProps from '../interfaces/FormComponentProps'
-import FormComponentData from '../interfaces/FormComponentData'
+import LoginSignupFormData from '../interfaces/LoginSignupFormData'
+interface LoginSignupFormProps {
+  formLabel: string
+  userName?: boolean
+  email?: boolean
+  password?: boolean
+  abortButtonLabel: string
+  approveButtonLabel: string
+  callBackDataFunction?: (formData: LoginSignupFormData) => void
+}
 
 const FormComponent = ({
   formLabel,
@@ -12,14 +20,14 @@ const FormComponent = ({
   approveButtonLabel,
 
   callBackDataFunction
-}: FormComponentProps) => {
+}: LoginSignupFormProps) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
   }
   const [userNameValue, setUserNameValue] = useState<string>('')
   const [emailValue, setEmailValue] = useState<string>('')
   const [passwordValue, setPasswordValue] = useState<string>('')
-  const [formData, setFormData] = useState<FormComponentData>()
+  const [formData, setFormData] = useState<LoginSignupFormData>()
   useEffect(() => {
     setFormData({
       userName: userNameValue,
