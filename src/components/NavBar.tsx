@@ -2,7 +2,22 @@ import { Fragment } from 'react'
 import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
-const navigation = [{ name: 'Uploader', link: '/', current: true }]
+import { signOutUser } from '../utils/firebaseAuth'
+import { notifyMessage } from '../utils/toasts'
+interface navigationItem {
+  name: string
+  link: string
+  current: boolean
+  functionality?: React.MouseEventHandler<HTMLAnchorElement>
+}
+const handleLogOut = async () => {
+  await signOutUser()
+  notifyMessage('Logged out.')
+}
+const navigation: navigationItem[] = [
+  { name: 'Uploader', link: '/uploader', current: true },
+  { name: 'Logout', link: '', current: false, functionality: handleLogOut }
+]
 
 function classNames(...classes: (boolean | string | undefined)[]): string {
   return classes.filter(Boolean).join(' ')
@@ -50,21 +65,38 @@ const Example = () => {
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <Link
-                        key={item.name}
-                        to={item.link}
-                        className={classNames(
-                          item.current
-                            ? ' text-white drop drop-shadow-[0px_0px_5px_rgba(255,255,255,0.5)] bg-violet-600/20 hover:bg-white/20 hover:duration-200'
-                            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'rounded-md px-3 py-2 text-sm font-medium'
-                        )}
-                        aria-current={item.current ? 'page' : undefined}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
+                    {navigation.map((item) =>
+                      item.functionality ? (
+                        <Link
+                          onClick={item.functionality}
+                          key={item.name}
+                          to={item.link}
+                          className={classNames(
+                            item.current
+                              ? ' text-white drop drop-shadow-[0px_0px_5px_rgba(255,255,255,0.5)] bg-violet-600/20 hover:bg-white/20 hover:duration-200'
+                              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                            'rounded-md px-3 py-2 text-sm font-medium'
+                          )}
+                          aria-current={item.current ? 'page' : undefined}
+                        >
+                          {item.name}
+                        </Link>
+                      ) : (
+                        <Link
+                          key={item.name}
+                          to={item.link}
+                          className={classNames(
+                            item.current
+                              ? ' text-white drop drop-shadow-[0px_0px_5px_rgba(255,255,255,0.5)] bg-violet-600/20 hover:bg-white/20 hover:duration-200'
+                              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                            'rounded-md px-3 py-2 text-sm font-medium'
+                          )}
+                          aria-current={item.current ? 'page' : undefined}
+                        >
+                          {item.name}
+                        </Link>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
@@ -73,21 +105,38 @@ const Example = () => {
 
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.link}
-                  className={classNames(
-                    item.current
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block rounded-md px-3 py-2 text-base font-medium'
-                  )}
-                  aria-current={item.current ? 'page' : undefined}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {navigation.map((item) =>
+                item.functionality ? (
+                  <Link
+                    onClick={item.functionality}
+                    key={item.name}
+                    to={item.link}
+                    className={classNames(
+                      item.current
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      'block rounded-md px-3 py-2 text-base font-medium'
+                    )}
+                    aria-current={item.current ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </Link>
+                ) : (
+                  <Link
+                    key={item.name}
+                    to={item.link}
+                    className={classNames(
+                      item.current
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      'block rounded-md px-3 py-2 text-base font-medium'
+                    )}
+                    aria-current={item.current ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </Link>
+                )
+              )}
             </div>
           </Disclosure.Panel>
         </>

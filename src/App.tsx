@@ -5,12 +5,14 @@ import Welcome from './pages/Welcome'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import { AuthRoute } from './components/AuthRoute'
+import { ToastContainer } from 'react-toastify'
 export default function App() {
   return (
     <div
       className="App bg-gradient-to-t to-violet-950 from-violet-700"
       style={{ height: '100%' }}
     >
+      <ToastContainer />
       <Routes>
         <Route
           path="/"

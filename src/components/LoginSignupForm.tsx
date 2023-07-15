@@ -36,8 +36,6 @@ const FormComponent = ({
     })
   }, [userNameValue, emailValue, passwordValue])
   const handleSignUp = () => {
-    console.log(formData)
-
     if (callBackDataFunction && formData) callBackDataFunction(formData)
   }
   return (
