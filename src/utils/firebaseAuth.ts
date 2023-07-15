@@ -1,9 +1,27 @@
 import {
   createUserWithEmailAndPassword,
   signOut,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  getRedirectResult
 } from 'firebase/auth'
+
 import { auth } from '../index'
+const googleAuthProvider = new GoogleAuthProvider()
+const signInWithGoogle = async () => {
+  await signInWithRedirect(auth, googleAuthProvider)
+}
+const getSignInGoogleResults = async () => {
+  const res = await getRedirectResult(auth)
+  if (res) {
+    const credential = GoogleAuthProvider.credentialFromResult(res)
+    if (credential) {
+      const token = credential.accessToken
+    }
+    const user = res.user
+  }
+}
 const signupUser = async (email: string, password: string) => {
   const userCredential = await createUserWithEmailAndPassword(
     auth,
@@ -22,4 +40,10 @@ const loginUser = async (email: string, password: string) => {
   const accessToken = await userCredential.user.getIdToken()
   localStorage.setItem('accessToken', accessToken)
 }
-export { loginUser, signOutUser, signupUser }
+export {
+  loginUser,
+  signOutUser,
+  signupUser,
+  signInWithGoogle,
+  getSignInGoogleResults
+}

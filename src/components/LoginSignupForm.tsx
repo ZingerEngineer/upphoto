@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import googleSVG from '../svgs/google.svg'
+import facebookSVG from '../svgs/facebook.svg'
+import microsoftSVG from '../svgs/microsoft.svg'
 import LoginSignupFormData from '../interfaces/LoginSignupFormData'
+const authVendors = [
+  { enabled: true, src: googleSVG, alt: 'google-icon' },
+  { enabled: true, src: microsoftSVG, alt: 'microsoft-icon' },
+  { enabled: true, src: facebookSVG, alt: 'facebook-icon' }
+]
 interface LoginSignupFormProps {
   formLabel: string
   userName?: boolean
@@ -8,6 +16,10 @@ interface LoginSignupFormProps {
   password?: boolean
   abortButtonLabel: string
   approveButtonLabel: string
+  handleGoogleFunction?: Function
+  handleMicrosoftFunction?: React.MouseEvent<HTMLButtonElement>
+  handleFacebookFunction?: React.MouseEvent<HTMLButtonElement>
+
   callBackDataFunction?: (formData: LoginSignupFormData) => void
 }
 
@@ -18,8 +30,10 @@ const FormComponent = ({
   password,
   abortButtonLabel,
   approveButtonLabel,
-
-  callBackDataFunction
+  callBackDataFunction,
+  handleGoogleFunction,
+  handleMicrosoftFunction,
+  handleFacebookFunction
 }: LoginSignupFormProps) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -126,6 +140,25 @@ const FormComponent = ({
           ) : (
             ''
           )}
+          <div className="auth-buttons px-3 mt-5 flex justify-center">
+            {authVendors.map((item) =>
+              item.enabled ? (
+                <button
+                  onClick={}
+                  key={item.alt}
+                  className="google-auth-button rounded-full shadow-md border-solid border-2 border-gray-200 p-2 mx-1"
+                >
+                  <img
+                    className="w-6"
+                    src={item.src}
+                    alt={item.alt}
+                  />
+                </button>
+              ) : (
+                ''
+              )
+            )}
+          </div>
         </div>
       </div>
 
