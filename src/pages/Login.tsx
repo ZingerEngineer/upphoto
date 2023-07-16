@@ -3,11 +3,6 @@ import LoginSignupFormData from '../interfaces/LoginSignupFormData'
 import { loginUser } from '../utils/firebaseAuth'
 import { notifyMessage, notifySuccess } from '../utils/toasts'
 import { useNavigate } from 'react-router-dom'
-import { signInWithGoogle, getSignInGoogleResults } from '../utils/firebaseAuth'
-const handleGoogleFunction = async () => {
-  await signInWithGoogle()
-  await getSignInGoogleResults()
-}
 const Login = () => {
   const navigate = useNavigate()
   const handleCallBack = async (formData: LoginSignupFormData) => {
@@ -24,6 +19,7 @@ const Login = () => {
     <>
       <div className="wrapper flex items-center justify-center w-full h-full">
         <FormComponent
+          formType="login"
           callBackDataFunction={handleCallBack}
           formLabel="Login"
           userName={false}
@@ -31,7 +27,6 @@ const Login = () => {
           password={true}
           abortButtonLabel="Cancel"
           approveButtonLabel="Login"
-          handleGoogleFunction={handleGoogleFunction}
         />
       </div>
     </>

@@ -1,40 +1,68 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import googleSVG from '../svgs/google.svg'
 import facebookSVG from '../svgs/facebook.svg'
-import microsoftSVG from '../svgs/microsoft.svg'
 import LoginSignupFormData from '../interfaces/LoginSignupFormData'
-const authVendors = [
-  { enabled: true, src: googleSVG, alt: 'google-icon' },
-  { enabled: true, src: microsoftSVG, alt: 'microsoft-icon' },
-  { enabled: true, src: facebookSVG, alt: 'facebook-icon' }
-]
+import { signInWithGoogle, signInWithFaceBook } from '../utils/firebaseAuth'
+import { notifyMessage } from '../utils/toasts'
 interface LoginSignupFormProps {
+  formType: string
   formLabel: string
   userName?: boolean
   email?: boolean
   password?: boolean
   abortButtonLabel: string
   approveButtonLabel: string
-  handleGoogleFunction?: Function
-  handleMicrosoftFunction?: React.MouseEvent<HTMLButtonElement>
-  handleFacebookFunction?: React.MouseEvent<HTMLButtonElement>
-
   callBackDataFunction?: (formData: LoginSignupFormData) => void
 }
 
 const FormComponent = ({
+  formType,
   formLabel,
   userName,
   email,
   password,
   abortButtonLabel,
   approveButtonLabel,
-  callBackDataFunction,
-  handleGoogleFunction,
-  handleMicrosoftFunction,
-  handleFacebookFunction
+  callBackDataFunction
 }: LoginSignupFormProps) => {
+  const navigate = useNavigate()
+  const handleGoogleCallBack = async () => {
+    try {
+      const res = await signInWithGoogle()
+      console.log(res)
+      notifyMessage('Login successful.')
+      navigate('/uploader')
+    } catch (error) {
+      console.log(error)
+      notifyMessage('Gmail login failed.')
+    }
+  }
+  const handleFaceBookCallBack = async () => {
+    try {
+      const res = await signInWithFaceBook()
+      notifyMessage('Login successful.')
+      console.log(res)
+      navigate('/uploader')
+    } catch (error) {
+      console.log(error)
+      notifyMessage('Facebook login failed.')
+    }
+  }
+  const authVendors = [
+    {
+      enabled: true,
+      src: googleSVG,
+      alt: 'google-icon',
+      functionality: handleGoogleCallBack
+    },
+    {
+      enabled: true,
+      src: facebookSVG,
+      alt: 'facebook-icon',
+      functionality: handleFaceBookCallBack
+    }
+  ]
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
   }
@@ -141,23 +169,25 @@ const FormComponent = ({
             ''
           )}
           <div className="auth-buttons px-3 mt-5 flex justify-center">
-            {authVendors.map((item) =>
-              item.enabled ? (
-                <button
-                  onClick={}
-                  key={item.alt}
-                  className="google-auth-button rounded-full shadow-md border-solid border-2 border-gray-200 p-2 mx-1"
-                >
-                  <img
-                    className="w-6"
-                    src={item.src}
-                    alt={item.alt}
-                  />
-                </button>
-              ) : (
-                ''
-              )
-            )}
+            {formType
+              ? authVendors.map((item) =>
+                  item.enabled ? (
+                    <button
+                      onClick={item.functionality}
+                      key={item.alt}
+                      className="google-auth-button rounded-full shadow-md border-solid border-2 border-gray-200 p-2 mx-1"
+                    >
+                      <img
+                        className="w-6"
+                        src={item.src}
+                        alt={item.alt}
+                      />
+                    </button>
+                  ) : (
+                    ''
+                  )
+                )
+              : ''}
           </div>
         </div>
       </div>

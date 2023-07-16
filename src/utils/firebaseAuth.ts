@@ -3,23 +3,26 @@ import {
   signOut,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult
+  signInWithPopup,
+  FacebookAuthProvider
 } from 'firebase/auth'
 
 import { auth } from '../index'
 const googleAuthProvider = new GoogleAuthProvider()
+const faceBookAuthProvider = new FacebookAuthProvider()
+
 const signInWithGoogle = async () => {
-  await signInWithRedirect(auth, googleAuthProvider)
+  const userCredential = await signInWithPopup(auth, googleAuthProvider)
+  return {
+    userName: userCredential.user.displayName,
+    email: userCredential.user.email
+  }
 }
-const getSignInGoogleResults = async () => {
-  const res = await getRedirectResult(auth)
-  if (res) {
-    const credential = GoogleAuthProvider.credentialFromResult(res)
-    if (credential) {
-      const token = credential.accessToken
-    }
-    const user = res.user
+const signInWithFaceBook = async () => {
+  const userCredential = await signInWithPopup(auth, faceBookAuthProvider)
+  return {
+    userName: userCredential.user.displayName,
+    email: userCredential.user.email
   }
 }
 const signupUser = async (email: string, password: string) => {
@@ -45,5 +48,5 @@ export {
   signOutUser,
   signupUser,
   signInWithGoogle,
-  getSignInGoogleResults
+  signInWithFaceBook
 }
