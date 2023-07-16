@@ -139,7 +139,16 @@ const Uploader = () => {
                     buttonFunction={handleBrowseClick}
                   />
                   <Button
-                    buttonContent={loading ? <Spinner /> : 'Upload'}
+                    buttonContent={
+                      loading ? (
+                        <Spinner
+                          width="w-6"
+                          height="h-6"
+                        />
+                      ) : (
+                        'Upload'
+                      )
+                    }
                     buttonFunction={handleUploadClick}
                     buttonRef={uploadButtonRef}
                   />

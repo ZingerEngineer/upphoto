@@ -13,6 +13,8 @@ const faceBookAuthProvider = new FacebookAuthProvider()
 
 const signInWithGoogle = async () => {
   const userCredential = await signInWithPopup(auth, googleAuthProvider)
+  const accessToken = await userCredential.user.getIdToken()
+  localStorage.setItem('accessToken', accessToken)
   return {
     userName: userCredential.user.displayName,
     email: userCredential.user.email
@@ -20,6 +22,8 @@ const signInWithGoogle = async () => {
 }
 const signInWithFaceBook = async () => {
   const userCredential = await signInWithPopup(auth, faceBookAuthProvider)
+  const accessToken = await userCredential.user.getIdToken()
+  localStorage.setItem('accessToken', accessToken)
   return {
     userName: userCredential.user.displayName,
     email: userCredential.user.email
