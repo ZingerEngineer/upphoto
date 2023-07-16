@@ -16,6 +16,7 @@ const Signup = () => {
     <>
       <div className="wrapper flex items-center justify-center w-full h-full">
         <FormComponent
+          formType="signup"
           callBackDataFunction={handleCallBack}
           formLabel="Signup"
           userName={false}

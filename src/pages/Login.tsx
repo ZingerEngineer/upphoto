@@ -19,6 +19,7 @@ const Login = () => {
     <>
       <div className="wrapper flex items-center justify-center w-full h-full">
         <FormComponent
+          formType="login"
           callBackDataFunction={handleCallBack}
           formLabel="Login"
           userName={false}

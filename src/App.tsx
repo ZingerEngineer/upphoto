@@ -4,7 +4,8 @@ import NotFound from './pages/NotFound'
 import Welcome from './pages/Welcome'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
-import { AuthRoute } from './components/AuthRoute'
+import { AuthenticatedRoute } from './components/AuthenticatedRoute'
+import { UnAuthenticatedRoute } from './components/UnAuthenticatedRoute'
 import { ToastContainer } from 'react-toastify'
 export default function App() {
   return (
@@ -21,18 +22,26 @@ export default function App() {
         <Route
           path="/uploader"
           element={
-            <AuthRoute>
+            <AuthenticatedRoute>
               <Uploader />
-            </AuthRoute>
+            </AuthenticatedRoute>
           }
         />
         <Route
           path="/login"
-          element={<Login />}
+          element={
+            <UnAuthenticatedRoute>
+              <Login />
+            </UnAuthenticatedRoute>
+          }
         />
         <Route
           path="/signup"
-          element={<Signup />}
+          element={
+            <UnAuthenticatedRoute>
+              <Signup />
+            </UnAuthenticatedRoute>
+          }
         />
         <Route
           path="/*"

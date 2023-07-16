@@ -1,26 +1,13 @@
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { onAuthStateChanged } from 'firebase/auth'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Spinner from './Spinner'
-import { redirect } from 'react-router-dom'
 import { auth } from '../index'
-// interface User {
-//   uid: string
-//   email: string | null
-//   displayName: string | null
-// }
-// interface Error {
-//   errorMsg: string | null
-// }
-// interface AuthState {
-//   currentUser: User | null
-//   currentError: Error | null
-// }
-interface AuthRouteProps {
+interface RouteProps {
   children: JSX.Element
 }
 
-export const AuthRoute = (props: AuthRouteProps) => {
+export const AuthenticatedRoute = (props: RouteProps) => {
   const { children } = props
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
@@ -35,7 +22,14 @@ export const AuthRoute = (props: AuthRouteProps) => {
     authCheck()
   }, [auth])
   if (isLoading) {
-    return <p>Loading</p>
+    return (
+      <div className="flex justify-center items-center w-full h-full">
+        <Spinner
+          width="w-20"
+          height="h-20"
+        />
+      </div>
+    )
   } else {
     return <>{children}</>
   }
