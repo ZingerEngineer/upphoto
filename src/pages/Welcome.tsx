@@ -7,7 +7,8 @@ const Welcome = () => {
   const userData = useContext(userDataContext)
   const [userName, setUserName] = useState<string | null | undefined>(null)
   useEffect(() => {
-    setUserName(userData?.currentUser?.email)
+    setUserName(userData?.currentUser?.displayName)
+    const { displayName } = userData?.currentUser?.displayName
   }, [userData])
   return (
     <>
@@ -18,7 +19,7 @@ const Welcome = () => {
           draggable="false"
         ></img>
         <p className="label text-4xl font-bold">Welcome to UpPhoto</p>
-        <p>{userName}</p>
+        <p>{userData?.currentUser?.displayName}</p>
         <p>Where you can upload any image you want.</p>
         <div className="buttons-wrapper flex flex-row items-center justify-center">
           <Link

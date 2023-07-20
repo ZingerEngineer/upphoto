@@ -6,8 +6,12 @@ import 'react-toastify/dist/ReactToastify.css'
 const Signup = () => {
   const handleCallBack = async (formData: LoginSignupFormData) => {
     try {
-      await signupUser(formData.email, formData.password)
-      notifySuccess('Signup complete.')
+      if (!(formData.userName && formData.email && formData.password)) {
+        notifyMessage('Fill in all fields.')
+      } else {
+        await signupUser(formData.userName, formData.email, formData.password)
+        notifySuccess('Signup complete.')
+      }
     } catch (error) {
       notifyMessage('Signup failed.')
     }
@@ -19,7 +23,7 @@ const Signup = () => {
           formType="signup"
           callBackDataFunction={handleCallBack}
           formLabel="Signup"
-          userName={false}
+          userName={true}
           email={true}
           password={true}
           abortButtonLabel="Cancel"

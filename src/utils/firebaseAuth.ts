@@ -4,7 +4,8 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  FacebookAuthProvider
+  FacebookAuthProvider,
+  updateProfile
 } from 'firebase/auth'
 
 import { auth } from '../index'
@@ -31,14 +32,19 @@ const signInWithFaceBook = async () => {
     email: userCredential.user.email
   }
 }
-const signupUser = async (email: string, password: string) => {
-  const userCredential = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  )
-  const user = userCredential.user
-  console.log(user)
+const signupUser = async (
+  userName: string,
+  email: string,
+  password: string
+) => {
+  await createUserWithEmailAndPassword(auth, email, password)
+  const currentUser = auth.currentUser
+  if (!currentUser) {
+    console.log('returned')
+    return
+  } else {
+    await updateProfile(currentUser, { displayName: userName })
+  }
 }
 const signOutUser = async () => {
   await signOut(auth)
