@@ -1,7 +1,14 @@
 import { Link } from 'react-router-dom'
 import Button from '../components/Button'
+import { userDataContext } from '../App'
+import { useState, useEffect, useContext } from 'react'
 
 const Welcome = () => {
+  const userData = useContext(userDataContext)
+  const [userName, setUserName] = useState<string | null | undefined>(null)
+  useEffect(() => {
+    setUserName(userData?.currentUser?.email)
+  }, [userData])
   return (
     <>
       <div className="welcome-content-wrapper w-full h-full p-5 flex flex-col justify-center items-center text-white">
@@ -11,6 +18,7 @@ const Welcome = () => {
           draggable="false"
         ></img>
         <p className="label text-4xl font-bold">Welcome to UpPhoto</p>
+        <p>{userName}</p>
         <p>Where you can upload any image you want.</p>
         <div className="buttons-wrapper flex flex-row items-center justify-center">
           <Link
