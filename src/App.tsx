@@ -7,6 +7,10 @@ import Signup from './pages/Signup'
 import { AuthenticatedRoute } from './components/AuthenticatedRoute'
 import { UnAuthenticatedRoute } from './components/UnAuthenticatedRoute'
 import { ToastContainer } from 'react-toastify'
+import { createContext } from 'react'
+import { auth } from './index'
+import { Auth } from 'firebase/auth'
+export const userDataContext = createContext<Auth | null>(null)
 export default function App() {
   return (
     <div
@@ -14,41 +18,42 @@ export default function App() {
       style={{ height: '100%' }}
     >
       <ToastContainer />
-      <Routes>
-        <Route
-          path="/"
-          element={<Welcome />}
-        />
-        <Route
-          path="/uploader"
-          element={
-            <AuthenticatedRoute>
-              <Uploader />
-            </AuthenticatedRoute>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <UnAuthenticatedRoute>
-              <Login />
-            </UnAuthenticatedRoute>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <UnAuthenticatedRoute>
-              <Signup />
-            </UnAuthenticatedRoute>
-          }
-        />
-        <Route
-          path="/*"
-          element={<NotFound />}
-        />
-      </Routes>
+      <userDataContext.Provider value={auth}>
+        <Routes>
+          <Route
+            path="/"
+            element={<Welcome />}
+          />
+          <Route
+            path="/uploader"
+            element={
+              <AuthenticatedRoute>
+                <Uploader />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <UnAuthenticatedRoute>
+                <Login />
+              </UnAuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <UnAuthenticatedRoute>
+                <Signup />
+              </UnAuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/*"
+            element={<NotFound />}
+          />
+        </Routes>
+      </userDataContext.Provider>
     </div>
   )
 }
-
