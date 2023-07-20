@@ -16,6 +16,7 @@ const signInWithGoogle = async () => {
   const accessToken = await userCredential.user.getIdToken()
   localStorage.setItem('accessToken', accessToken)
   return {
+    userImage: userCredential.user.photoURL,
     userName: userCredential.user.displayName,
     email: userCredential.user.email
   }
@@ -25,6 +26,7 @@ const signInWithFaceBook = async () => {
   const accessToken = await userCredential.user.getIdToken()
   localStorage.setItem('accessToken', accessToken)
   return {
+    userImage: userCredential.user.photoURL,
     userName: userCredential.user.displayName,
     email: userCredential.user.email
   }

@@ -1,9 +1,12 @@
 import { Fragment } from 'react'
-import { Disclosure } from '@headlessui/react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import user_white from '../svgs/user_white.svg'
 import { Link } from 'react-router-dom'
 import { signOutUser } from '../utils/firebaseAuth'
 import { notifyMessage } from '../utils/toasts'
+import { useContext, useEffect, useState } from 'react'
+import { userDataContext } from '../App'
 interface navigationItem {
   name: string
   link: string
@@ -15,8 +18,7 @@ const handleLogOut = async () => {
   notifyMessage('Logged out.')
 }
 const navigation: navigationItem[] = [
-  { name: 'Uploader', link: '/uploader', current: true },
-  { name: 'Logout', link: '', current: false, functionality: handleLogOut }
+  { name: 'Uploader', link: '/uploader', current: true }
 ]
 
 function classNames(...classes: (boolean | string | undefined)[]): string {
@@ -24,6 +26,14 @@ function classNames(...classes: (boolean | string | undefined)[]): string {
 }
 
 const Example = () => {
+  const userData = useContext(userDataContext)
+  const [userEmail, setUserEmail] = useState<string | null | undefined>(null)
+  const [userImage, setUserImage] = useState<string | null | undefined>(null)
+
+  useEffect(() => {
+    setUserEmail(userData?.currentUser?.email)
+    setUserImage(userData?.currentUser?.photoURL)
+  }, [userData])
   return (
     <Disclosure
       as="nav"
@@ -52,16 +62,26 @@ const Example = () => {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
+                  <Link
+                    to="/"
                     className="block h-8 w-auto lg:hidden"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
-                  <img
+                  >
+                    <img
+                      className="h-8 w-auto"
+                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                      alt="Your Company"
+                    />
+                  </Link>
+                  <Link
+                    to="/"
                     className="hidden h-8 w-auto lg:block"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
+                  >
+                    <img
+                      className="h-8 w-auto"
+                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                      alt="Your Company"
+                    />
+                  </Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
@@ -99,6 +119,60 @@ const Example = () => {
                     )}
                   </div>
                 </div>
+              </div>
+              <div className="user-credentials ml-3 flex flex-row items-center bg-white/20 p-1 rounded-full">
+                <p className="mx-3 text-white font-semibold">{userEmail}</p>
+                <Menu as="div">
+                  <div>
+                    <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <span className="sr-only">Open user menu</span>
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src={userImage ? userImage : user_white}
+                        alt="user_avatar"
+                      />
+                    </Menu.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <Link
+                            to="user/settings"
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700'
+                            )}
+                          >
+                            Settings
+                          </Link>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <Link
+                            onClick={handleLogOut}
+                            to="welcome"
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700'
+                            )}
+                          >
+                            Log out
+                          </Link>
+                        )}
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
               </div>
             </div>
           </div>
