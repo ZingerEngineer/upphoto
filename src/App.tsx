@@ -7,10 +7,8 @@ import Signup from './pages/Signup'
 import { AuthenticatedRoute } from './components/AuthenticatedRoute'
 import { UnAuthenticatedRoute } from './components/UnAuthenticatedRoute'
 import { ToastContainer } from 'react-toastify'
-import { createContext } from 'react'
+import { userDataContext } from './index'
 import { auth } from './index'
-import { Auth } from 'firebase/auth'
-export const userDataContext = createContext<Auth | null>(null)
 export default function App() {
   return (
     <div

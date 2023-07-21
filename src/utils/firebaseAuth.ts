@@ -37,8 +37,14 @@ const signupUser = async (
   email: string,
   password: string
 ) => {
-  await createUserWithEmailAndPassword(auth, email, password)
+  const userCredential = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  )
   const currentUser = auth.currentUser
+  const accessToken = await userCredential.user.getIdToken()
+  localStorage.setItem('accessToken', accessToken)
   if (!currentUser) {
     console.log('returned')
     return

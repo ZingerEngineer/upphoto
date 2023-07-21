@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { signOutUser } from '../utils/firebaseAuth'
 import { notifyMessage } from '../utils/toasts'
 import { useContext, useEffect, useState } from 'react'
-import { userDataContext } from '../App'
+import { userDataContext } from '../index'
 interface navigationItem {
   name: string
   link: string
