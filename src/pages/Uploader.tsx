@@ -8,6 +8,13 @@ import React, { useState, useRef, useEffect } from 'react'
 import { uploadImage } from '../utils/firebase'
 import Preview from '../components/Preview'
 import Button from '../components/Button'
+import {
+  createUser,
+  createImageLinkForUser,
+  getUsers,
+  getUser
+} from '../utils/FireStore'
+import { auth } from '../index'
 const Uploader = () => {
   const [isDragging, setIsDragging] = useState(0)
   const uploadSectionRef = useRef<HTMLDivElement | null>(null)
@@ -85,6 +92,19 @@ const Uploader = () => {
           setLoading((loading) => !loading)
           const res = await notifyPromise(uploadImage(photoToUpload))
           setCurrentImageURL(res.url)
+          if (
+            auth.currentUser?.displayName &&
+            auth.currentUser?.email &&
+            currentImageURL
+          ) {
+            const user = await getUser(auth.currentUser.displayName)
+            if (user) {
+              createImageLinkForUser()
+            } else {
+              createUser(auth.currentUser?.displayName, auth.currentUser?.email)
+              createImageLinkForUser()
+            }
+          }
         } else {
           console.log("Provided image isn't valid")
         }
