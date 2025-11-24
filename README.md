@@ -1,46 +1,78 @@
-# Getting Started with Create React App
+# upphoto
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
+upphoto is a small React application built to explore browser camera APIs, drag-and-drop image uploading, and integration with Firebase Storage and Firestore. The app allows users to capture photos directly from their device’s camera or upload existing images through a custom-built dropzone interface. It was created as a learning project to understand image handling, client-side uploads, and Firebase data workflows.
+
+## Technologies Used
+- React (Create React App)
+- TypeScript
+- Firebase (v9 modular SDK)
+  - Firebase Storage
+  - Firestore Database
+- Browser Camera API
+- Custom drag-and-drop uploader
+- react-router-dom (routing)
+- react-toastify (notifications)
+- Headless UI + Heroicons (UI components)
+- Tailwind CSS (styling)
+
+## Important Note
+To run this application, you **must** have a Firebase project with:
+- Firebase Storage bucket  
+- Firestore database  
+- Web app credentials (Firebase config)  
+
+The Firebase configuration must be added manually to the project before running it.
+
+## Installation Instructions
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ZingerEngineer/upphoto.git
+   cd upphoto
+    ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Create your Firebase project in the Firebase Console and enable:
+
+   * Firestore
+   * Storage
+   * (Optional) Authentication if required later
+
+4. Add your Firebase configuration.
+   - Ensure the Storage and Firestore imports are added where required.
+
+5. Start the development server:
+
+   ```bash
+   npm start
+   ```
+
+   The app will run at:
+
+   ```
+   http://localhost:3000
+   ```
+
+## Usage
+
+* Click **Take Photo** to access the browser camera API and capture images.
+* Drag and drop any image into the dropzone to upload it.
+* Uploaded images are stored in Firebase Storage.
+* Metadata or references can be saved in Firestore depending on the implementation.
+* Notifications will appear using react-toastify to indicate upload status or errors.
 
 ## Available Scripts
 
-In the project directory, you can run:
+* `npm start` — Run development server
+* `npm build` — Create production build
+* `npm test` — Run test suite
+* `npm eject` — Eject CRA configuration (irreversible)
 
-### `npm start`
+## License
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+This project does not currently specify a license. Add a `LICENSE` file if you plan to make it open source or share it publicly.
